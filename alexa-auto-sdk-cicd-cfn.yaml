@@ -1,0 +1,55 @@
+Description:  CodeCommit/CodeBuild For Alexa Auto SDK Workshop
+Parameters:
+Resources:
+  AlexaRepo:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryName: alexa-auto-sdk
+  InputArtifactS3:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: Fn::Sub: [alexa-auto-app-input-artifact-${AWS::AccountId}]
+  OutputArtifactS3:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: Fn::Sub: [alexa-auto-app-output-artifact-${AWS::AccountId}]
+
+  BuildTool:
+    Type: AWS::CodeBuild::Project
+    Properties: 
+      Artifacts: 
+          Location: S3
+          Name: String
+          NamespaceType: String
+          OverrideArtifactName: Boolean
+          Packaging: String
+          Path: String
+          Type: String
+      Environment: 
+        ComputeType: BUILD_GENERAL1_2XLARGE
+        Image: aws/codebuild/standard:5.0
+        Type: LINUX_CONTAINER
+      LogsConfig: 
+        CloudWatchLogs: 
+          Status: ENABLED
+      Name: alexa-auto-app-build
+      ServiceRole: Fn::GetAtt: [CodebuildServiceRole, Arn]
+      Source: 
+        Type: CODECOMMIT
+        Location: Fn::GetAtt: [ AlexaRepo, CloneUrlHttp ]
+  CodebuildServiceRole:
+    Type: AWS::IAM::Role
+      Properties: 
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - codebuild.amazonaws.com
+              Action:
+                - 'sts:AssumeRole'
+        ManagedPolicyArns: 
+          - arn:aws:iam::aws:policy/AdministratorAccess
+        RoleName: alexa-auto-app-code-build-service-role
+
