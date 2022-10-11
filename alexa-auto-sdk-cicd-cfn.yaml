@@ -18,13 +18,10 @@ Resources:
     Type: AWS::CodeBuild::Project
     Properties: 
       Artifacts: 
-          Location: S3
-          Name: String
-          NamespaceType: String
-          OverrideArtifactName: Boolean
-          Packaging: String
-          Path: String
-          Type: String
+          Location: Fn::Sub: [alexa-auto-app-output-artifact-${AWS::AccountId}]
+          Name: alexa-auto-apk-build
+          NamespaceType: BUILD_ID
+          Type: S3
       Environment: 
         ComputeType: BUILD_GENERAL1_2XLARGE
         Image: aws/codebuild/standard:5.0
