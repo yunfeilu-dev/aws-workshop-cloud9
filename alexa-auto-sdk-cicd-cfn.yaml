@@ -1,5 +1,4 @@
 Description:  CodeCommit/CodeBuild For Alexa Auto SDK Workshop
-Parameters:
 Resources:
   AlexaRepo:
     Type: AWS::CodeCommit::Repository
@@ -8,17 +7,17 @@ Resources:
   InputArtifactS3:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: Fn::Sub: [alexa-auto-app-input-artifact-${AWS::AccountId}]
+      BucketName: !Sub 'alexa-auto-app-input-artifact-${AWS::AccountId}'
   OutputArtifactS3:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: Fn::Sub: [alexa-auto-app-output-artifact-${AWS::AccountId}]
+      BucketName: !Sub 'alexa-auto-app-output-artifact-${AWS::AccountId}'
 
   BuildTool:
     Type: AWS::CodeBuild::Project
     Properties: 
       Artifacts: 
-          Location: Fn::Sub: [alexa-auto-app-output-artifact-${AWS::AccountId}]
+          Location: !Sub 'alexa-auto-app-output-artifact-${AWS::AccountId}'
           Name: alexa-auto-apk-build
           NamespaceType: BUILD_ID
           Type: S3
@@ -30,23 +29,23 @@ Resources:
         CloudWatchLogs: 
           Status: ENABLED
       Name: alexa-auto-app-build
-      ServiceRole: Fn::GetAtt: [CodebuildServiceRole, Arn]
+      ServiceRole: !GetAtt CodebuildServiceRole.Arn
       Source: 
         Type: CODECOMMIT
-        Location: Fn::GetAtt: [ AlexaRepo, CloneUrlHttp ]
+        Location: !GetAtt AlexaRepo.CloneUrlHttp
   CodebuildServiceRole:
     Type: AWS::IAM::Role
-      Properties: 
-        AssumeRolePolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service:
-                  - codebuild.amazonaws.com
-              Action:
-                - 'sts:AssumeRole'
-        ManagedPolicyArns: 
-          - arn:aws:iam::aws:policy/AdministratorAccess
-        RoleName: alexa-auto-app-code-build-service-role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      RoleName: alexa-auto-app-code-build-service-role
 
