@@ -427,7 +427,7 @@ Resources:
                       ec2 = boto3.client('ec2')
           
                       # Get the InstanceId of the Cloud9 IDE
-                      instance = ec2.describe_instances(Filters=[{'Name': 'tag:Name','Values': ['aws-cloud9-alexaautoworkshop'+'-'+event['ResourceProperties']['EnvironmentId']]}])['Reservations'][0]['Instances'][0]
+                      instance = ec2.describe_instances(Filters=[{'Name': 'tag:Name','Values': ['aws-cloud9-alexa-auto-sdk-workshop'+'-'+event['ResourceProperties']['EnvironmentId']]}])['Reservations'][0]['Instances'][0]
                       logger.info('instance: {}'.format(instance))
           
                       # Create the IamInstanceProfile request object
