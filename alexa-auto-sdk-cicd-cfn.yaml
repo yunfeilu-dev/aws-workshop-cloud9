@@ -136,7 +136,7 @@ Resources:
           referenceType:
             - branch
           referenceName:
-            - master
+            - 4.1.1
       Targets:
         - Arn: !Join 
             - ''
