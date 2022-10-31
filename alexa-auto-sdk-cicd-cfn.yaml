@@ -185,6 +185,8 @@ Resources:
                 Provider: CodeBuild
               InputArtifacts:
                 - Name: SourceOutput
+              OutputArtifacts: 
+                - Name: OutputArtifactS3
               Configuration:
                 ProjectName: !Ref BuildTool
               RunOrder: 1
