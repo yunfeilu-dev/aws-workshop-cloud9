@@ -446,7 +446,7 @@ Resources:
                           logger.info('instance_state: {}'.format(instance_state))
           
                       # attach instance profile
-                      instsance_info = ec2.describe_instances(InstanceIds=['i-04f95afc850a8d740'])['Reservations'][0]['Instances'][0]
+                      instsance_info = ec2.describe_instances(InstanceIds=[instance['InstanceId']])['Reservations'][0]['Instances'][0]
                       if 'IamInstanceProfile' not in instsance_info:
                           response = ec2.associate_iam_instance_profile(IamInstanceProfile=iam_instance_profile, InstanceId=instance['InstanceId'])
                           logger.info('response - associate_iam_instance_profile: {}'.format(response))
